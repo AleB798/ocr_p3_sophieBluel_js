@@ -55,6 +55,37 @@ body {
 	font-size: 14px;
 	background: #FFFEF8;
 }
+/* --EDIT BAR ADMIN-- */
+
+.edit-bar-header {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: black;
+	padding: 12px 0px;
+	font-family: 'Work Sans';
+	font-weight: 400;
+	font-size: 16px;
+	color: #FFFFFF;
+	gap: 20px;
+}
+
+.edit-bar-header i {
+	color: #FFFFFF;
+	margin-right: 5px;
+}
+
+.btn-edit-bar {
+	background: #FFFFFF;
+	border: none;
+	border-radius: 60px;
+	font-family: 'Work Sans';
+	font-weight: 500;
+	font-size: 14px;
+	text-align: center;
+	padding: 9px 25px;
+	cursor: pointer;
+}
 
 /* --HEADER-- */
 
@@ -131,6 +162,15 @@ li a:hover {
 	width: 80%;
 }
 
+.edit-btn {
+	background: none;
+	border: none;
+	margin: 10px 53px;
+	font-family: 'Work Sans';
+	font-size: 14px;
+	cursor: pointer;
+}
+
 #introduction article {
 	flex: 1
 }
@@ -145,7 +185,18 @@ li a:hover {
 
 #portfolio h2 {
 	text-align: center;
-	margin-bottom: 1em;
+}
+
+.projets {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 15px;
+	margin: 100px 0px 60px;
+}
+
+.projets .edit-btn {
+	margin: 0px;
 }
 
 /* Add Filters Gallery */
@@ -184,6 +235,10 @@ li a:hover {
 
 .gallery img {
 	width: 100%;
+}
+
+.login {
+	display: none;
 }
 
 /*Contact Form */

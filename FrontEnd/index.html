@@ -13,6 +13,10 @@
 	<script src="https://kit.fontawesome.com/30370071b2.js" crossorigin="anonymous"></script>
 </head>
 <body>
+	<div class="edit-bar-header login">
+		<div><i class="fa-regular fa-pen-to-square"></i>Mode édition</div>
+		<button class="btn-edit-bar">Publier les changements</button>
+	</div>
 <header>	
 	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
 	<nav>
@@ -28,6 +32,10 @@
 	<section id="introduction">
 		<figure>
 			<img src="./assets/images/sophie-bluel.png" alt="">
+			<button type="button" class="edit-btn login">
+				<i class="fa-regular fa-pen-to-square"></i>				
+				modifier
+			</button>
 		</figure>
 		<article>
 			<h2>Designer d'espace</h2>
@@ -37,8 +45,14 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<div class="projets">
-			<h2>Mes Projets</h2>
+		<div>
+			<div class="projets">
+				<h2>Mes Projets</h2>
+				<button type="button" class="edit-btn login" data-modal="modal-remove-pictures">
+					<i class="fa-regular fa-pen-to-square"></i>				
+					modifier
+				</button>
+			</div>
 			<div class="filters-gallery">
 				<button class="filter-button">Tous</button>
 				<button class="filter-button" data-category-id="1">Objets</button>

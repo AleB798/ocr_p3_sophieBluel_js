@@ -1,4 +1,3 @@
-
 /* Récupération de l'élément du DOM qui accueillera les images */
 
 const gallery = document.querySelector(".gallery")
@@ -69,4 +68,23 @@ function filterImages (event) {
     }
   })
 }
+
+/* ---Page version admin--- */
+
+/* Vérifier si l'utilisateur est connecté et faire changement */
+const userAuthenticated = sessionStorage.getItem('token');
+  console.log(userAuthenticated)
+    if (userAuthenticated) {
+      // Si connecter faire des changements sur la page d'accueil
+      const logInElement = document.querySelectorAll(".login")
+      for (var i= 0; i < logInElement.length; i++) {
+        logInElement[i].style.display = "block";
+      }
+      //supprimer les filtres en mode admin
+      document.querySelector('.filters-gallery').style.display = "none";
+
+      //changer le texte du lien de navigation
+      var loginLink = document.getElementById("log-link");
+      loginLink.textContent = "Logout";
+    }
 
