@@ -41,14 +41,14 @@
 			<h2>Designer d'espace</h2>
 			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
-			<p>En cas de besoin, une équipe pluridisciplinaire peut-être constituée : architecte DPLG, décorateur(trice)</p>
+			<p>En cas de besoin, une équipe pluridisciplinaire peut être constituée : architecte DPLG, décorateur(trice)</p>
 		</article>
 	</section>
 	<section id="portfolio">
 		<div>
 			<div class="projets">
 				<h2>Mes Projets</h2>
-				<button type="button" class="edit-btn login" data-modal="modal-remove-pictures">
+				<button type="button" class="edit-btn login open-modal">
 					<i class="fa-regular fa-pen-to-square"></i>				
 					modifier
 				</button>
@@ -60,7 +60,50 @@
 				<button class="filter-button" data-category-id="3">Hôtels & restaurants</button>
 			</div>
 		</div>
-		<div class="gallery">
+<!--MODALS-->
+		<div id="modals">
+			<div class="modal-content">
+				<span id="close-btn">&times;</span>
+				<div id="modal-remove">
+					<h3>Galerie photos</h3>
+					<div id="modal-gallery">
+						<!--gérée dynamiquement en js-->
+					</div>
+					<hr>
+					<button class="btn-add-pics">Ajouter une photo</button>
+					<p>Supprimer la galerie</p>
+				</div>
+				<div id="modal-add" style="display: none;">
+					<h3>Ajout photo</h3>
+					<div id="box-add-pics">
+						<span class="iconImg">
+							<i class="fa-regular fa-image fa-2xl"></i>
+						</span>
+						<button type="file">+ ajouter photo</button>
+						<p>jpg, png 4mo max</p>
+					</div>
+					<form class="add-pics-form" method="post">
+						<div class="add-pics-box-form">
+							<label for="title">Titre</label>
+							<input type="text" name="title" id="title" required >
+						</div>
+						<div class="add-pics-box-form">
+							<label for="categories">Catégories</label>
+							<select id="categories" name="catégories" required>
+								<option value="tous">Tous</option>
+								<option value="objets">Objets</option>
+								<option value="appartements">Appartements</option>
+								<option value="hôtels-restaurants">Hôtels & restaurants</option>
+							</select>
+						</div>
+						<hr>
+						<button type="submit">valider</button>
+					</form>
+				</div>
+			</div>
+		</div>
+		<div id="gallery">
+			<!--gérée dynamiquement en js-->
 		</div>
 	</section>
 	<section id="contact">

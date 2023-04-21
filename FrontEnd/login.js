@@ -39,4 +39,3 @@ form.addEventListener('submit', (e) => {
         // Afficher un message d'erreur générique
         });
 });
-
