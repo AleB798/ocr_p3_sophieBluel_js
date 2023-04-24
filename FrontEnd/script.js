@@ -32,12 +32,17 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
       deleteBtn.dataset.id = obj.id
       deleteBtn.classList.add('deleteBtn')
       const icon = document.createElement("i")
+      deleteBtn.dataset.id = obj.id
+      deleteBtn.classList.add('deleteBtn')
       icon.classList.add("fa-regular", "fa-trash-can")
 
-      deleteBtn.onclick = (event) => { deletePicture(event) }
+      //deleteBtn.onclick = (event) => { deletePicture(event) }
+      deleteBtn.addEventListener('click', deletePicture);
+      
 
       deleteBtn.appendChild(icon)
       figure.appendChild(deleteBtn)
+      figure.id = `modal-picture-${obj.id}`
 
       // code pour créer le bouton de déplacement dans la modale
       const moveImgBtn = document.createElement("button")
@@ -48,6 +53,8 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
 
       moveImgBtn.appendChild(iconMoveImg)
       figure.appendChild(moveImgBtn)
+    } else {
+      figure.id = `picture-${obj.id}`
     }
 
     if (changeFigcaptionText && target === modalGallery) {
@@ -111,37 +118,46 @@ logoutLink.addEventListener("click", logout);
 function logout() {
   sessionStorage.removeItem('token');
   location.reload();
+  console.log('toto');
 }
 
 /*--- MODALS ---*/
+/* fonctions open & close */
 const modal = document.getElementById("modals")
 const modalRemove = document.getElementById("modal-remove")
-const openBtn1 = document.querySelectorAll(".open-modal")
+const openBtn1 = document.querySelector(".open-modal")
 const modalAdd = document.getElementById("modal-add")
-const openBtn2 = document.querySelectorAll(".btn-add-pics")
+const openBtn2 = document.querySelector(".btn-add-pics")
 const modalContent = document.querySelector(".modal-content");
+const arrowBack = document.getElementById("arrowBack")
 
-openBtn1.forEach(btn => {
-  btn.addEventListener("click", openModalRemove)
-})
+openBtn1.addEventListener("click", openModalRemove)
 
 function openModalRemove() {
   modal.style.display = "block";
   modalRemove.style.display = "";
   modalAdd.style.display = "none";
+  arrowBack.style.display = "";
 }
 
-openBtn2.forEach(btn => {
-  btn.addEventListener("click", openModalAdd)
-}) //Pourquoi un for each alors qu'il n'y a q'un élt ?
+openBtn2.addEventListener("click", openModalAdd)
 
 function openModalAdd() {
-  modalAdd.style.display = ""; //bonne pratique de ne rien mettre "" ??
+  modalAdd.style.display = "";
   modalRemove.style.display = "none";
+  arrowBack.style.display = "block";
+}
+
+arrowBack.addEventListener("click", goBack)
+
+function goBack() {
+  modalAdd.style.display = "none";
+  modalRemove.style.display = "";
+  arrowBack.style.display = "";
 }
 
 const closeBtn = document.getElementById("close-btn")
-closeBtn.addEventListener("click", closeModal) //pourquoi avec un forEach ça bug ??
+closeBtn.addEventListener("click", closeModal)
 
 function closeModal() {
   modal.style.display= "";
@@ -150,29 +166,65 @@ function closeModal() {
 modal.addEventListener("click", function(event) {
   if (event.target === modal) {
     closeModal();
-  } else if (!modalContent.contains(event.target)) {
-    closeModal();
-  }
+  } 
 });
 
 /* Création de la fonction de suppression dans la modale*/
 function deletePicture(event) {
   const id = event.target.dataset.id;
+  console.log(id)
   fetch(`http://localhost:5678/api/works/${id}`, {
     method: 'DELETE',
     headers: {
-      accept: "*/*",
-      Authorization: `Bearer ${sessionStorage.token}`
+      'accept' : "*/*",
+      'authorization': `Bearer ${sessionStorage.token}`
     }
   })
-    .then(response => {
+    .then(function(response) {
+      console.log(response)
       if (response.ok) {
         // suppression de l'image
         const figure = event.target.closest('figure');
-        figure.parentNode.removeChild(figure);
+        figure.remove();
+        const figureHome = document.getElementById(`picture-${id}`)
+        figureHome.remove();
+      } else {
+        console.log("erreur gros bouffon", response)
       }
     })
     .catch(error => console.error(error));
   }
 
-  //event.stopPropagation() pour éviter la fermture de la modale a chaque suppression
+  //pourquoi la page se reload ????
+
+  /* Création de la fonction d'ajout de photo */
+  /* Upload img*/
+
+  /*envoi vers l'API*/
+  const addPicFormEls = document.querySelector('.add-pics-form')
+
+  addPicFormEls.addEventListener('submit', (e) => {
+    (e).preventDefault();
+
+    const dataForm = new FormData(addPicFormEls);
+  
+    fetch('http://localhost:5678/api/works', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'Content-Type': 'multipart/form-data',
+        'authorization': `Bearer ${sessionStorage.token}`
+      },
+      body: dataForm,
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data)
+      })
+      .catch(error => {
+        console.error(error);
+        // Afficher un message d'erreur générique
+      });  
+  })
+
+

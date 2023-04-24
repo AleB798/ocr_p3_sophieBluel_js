@@ -243,6 +243,15 @@ li a:hover {
   cursor: pointer;
 }
 
+#arrowBack {
+	display: none;
+	position: absolute;
+	top: 15px;
+	left: 15px;
+	font-size: 16px;
+	cursor: pointer;
+}
+
 .modal-content h3 {
 	font-family: 'Work Sans';
 	font-weight: 400;
@@ -288,6 +297,7 @@ li a:hover {
 	position: absolute;
 	top: 5px;
 	right: 5px;
+	cursor: pointer;
 }
 
 .fa-trash-can {
