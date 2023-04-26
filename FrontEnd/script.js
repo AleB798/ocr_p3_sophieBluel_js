@@ -197,6 +197,7 @@ function deletePicture(event) {
 const addPicFormEls = document.getElementById('add-pics-form');
 const userImg = document.getElementById('user-files');
 const imgPreview = document.getElementById('img-preview');
+const boxAddPic = document.getElementById('box-add-pics')
 
 userImg.addEventListener('change', () => {
   const fileReader = new FileReader();
@@ -208,6 +209,10 @@ userImg.addEventListener('change', () => {
     newImg.src = url;
 
     imgPreview.appendChild(newImg);
+
+    boxAddPic.style.display = 'none';
+    imgPreview.style.display = 'block';
+
   });
 });
 
@@ -231,14 +236,14 @@ addPicFormEls.addEventListener('submit', (e) => {
   })
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      boxAddPic.style.display = '';
       addPicFormEls.reset();
 
       alert('Votre formulaire a bien été envoyé.');
-      imgPreview.innerHTML = '';//supprime la preview
+      imgPreview.innerHTML = ''; //supprime la preview
 
-      addPicturesToTarget(gallery, data);
-      addPicturesToTarget(modalGallery, data, true, true);
+      addPicturesToTarget(gallery, [data]); //on met data en [], pour créer un array même pour sun seul objet car voir fonction ci-dessus
+      addPicturesToTarget(modalGallery, [data], true, true);
     })
     .catch(error => {
       console.log("Erreur !!! Erreur !!! Erreur !!")
