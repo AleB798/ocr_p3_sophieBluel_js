@@ -78,25 +78,27 @@
 				</div>
 				<div id="modal-add" style="display: none;">
 					<h3>Ajout photo</h3>
-					<div id="box-add-pics">
-						<span class="iconImg">
-							<i class="fa-regular fa-image fa-2xl"></i>
-						</span>
-						<input type="file" placeholder="+ ajouter photo" required></input>
-						<p>jpg, png 4mo max</p>
-					</div>
-					<form class="add-pics-form" method="post">
-						<div class="add-pics-box-form">
-							<label for="title">Titre</label>
-							<input type="text" name="title" id="title" required >
+					<form id="add-pics-form" method="post">
+						<div id="box-add-pics">
+							<span class="iconImg">
+								<i class="fa-regular fa-image fa-2xl"></i>
+							</span>
+							<div id="img-preview"></div>
+							<label for="user-files">+ ajouter photo</label>
+							<input type="file" name="user-files" id="user-files"  accept=".jpg, .png"required></input>
+							<p>jpg, png 4mo max</p>
 						</div>
 						<div class="add-pics-box-form">
-							<label for="categories">Catégories</label>
-							<select id="categories" name="catégories" required>
+							<label for="title">Titre</label>
+							<input type="text" name="title" id="title" required>
+						</div>
+						<div class="add-pics-box-form">
+							<label for="category">Catégories</label>
+							<select id="category" name="category" required>
 								<option value="tous">Tous</option>
-								<option value="objets">Objets</option>
-								<option value="appartements">Appartements</option>
-								<option value="hôtels-restaurants">Hôtels & restaurants</option>
+								<option value="1">Objets</option>
+								<option value="2">Appartements</option>
+								<option value="3">Hôtels & restaurants</option>
 							</select>
 						</div>
 						<hr>

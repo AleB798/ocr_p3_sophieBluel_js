@@ -2,7 +2,7 @@ const form = document.querySelector('.form-container');
 const errorMessage = document.querySelector('#error-message');
 
 form.addEventListener('submit', (e) => {
-  e.preventDefault(); //on empêche l'action par défaut
+  e.preventDefault(); // Empêche l'action par défaut
 
   const email = document.getElementById('email').value;
   const password = document.getElementById('mdp').value;

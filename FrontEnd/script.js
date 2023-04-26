@@ -1,17 +1,18 @@
-/* Récupération des éléments du DOM qui accueilleront les images */
+/* ---Gestion des galeries--- */
+/* Récupération des éléments du DOM */
 const gallery = document.querySelector("#gallery")
 const modalGallery = document.querySelector("#modal-gallery")
 
 function addPicturesToTarget(target, pictureArray, destroyButton = false, changeFigcaptionText = false, nouveauTexte = "éditer") {
   pictureArray.forEach(obj => {
 
-/* Création des balises pour les éléments de la gallerie car elle est gérée dynamiquement */
+/* Création des balises pour les éléments de la galerie */
     const figure = document.createElement("figure")
     // <figure></figure>
     figure.dataset.categoryId = obj.categoryId
     // <figure data-category-id="4"></figure>
     const image = document.createElement("img")
-    // <img></img>
+    // <img>
       //Pour ajouter les attributs à la balise <img> : Element.setAttribute(name, value);
       image.setAttribute("alt", obj.title) 
       // <img alt="nom de l'image"></img>
@@ -26,7 +27,7 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
     target.appendChild(figure)
 
     if (destroyButton) {
-      // code pour créer le bouton de suppression dans la modale
+      // création du bouton de supression d'image dans la modale
       const deleteBtn = document.createElement("button")
       deleteBtn.setAttribute("type", "button")
       deleteBtn.dataset.id = obj.id
@@ -36,15 +37,15 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
       deleteBtn.classList.add('deleteBtn')
       icon.classList.add("fa-regular", "fa-trash-can")
 
-      //deleteBtn.onclick = (event) => { deletePicture(event) }
-      deleteBtn.addEventListener('click', deletePicture);
-      
-
       deleteBtn.appendChild(icon)
       figure.appendChild(deleteBtn)
       figure.id = `modal-picture-${obj.id}`
 
-      // code pour créer le bouton de déplacement dans la modale
+      //Ajout d'écouteur d'évènement pour le btn de supression d'image
+      deleteBtn.addEventListener('click', deletePicture);
+
+
+      // création du bouton de déplacement d'image dans la modale
       const moveImgBtn = document.createElement("button")
       moveImgBtn.setAttribute("type", "button")
       moveImgBtn.classList.add('move-img-btn')
@@ -57,6 +58,7 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
       figure.id = `picture-${obj.id}`
     }
 
+    //Changement des textes pour les images de la modalGallery
     if (changeFigcaptionText && target === modalGallery) {
       //changer le texte des figcaptions
       const figcaptions = modalGallery.querySelectorAll('figure > figcaption');
@@ -65,18 +67,16 @@ function addPicturesToTarget(target, pictureArray, destroyButton = false, change
   })
 }
 
- /* Récupération dynamique des données des travaux via l'API */
+/* Récupération dynamique des données des travaux via l'API */
 fetch('http://localhost:5678/api/works')
   .then(response => response.json())
   .then(data => {
-    console.log(data)
     addPicturesToTarget(gallery, data);
     addPicturesToTarget(modalGallery, data, true, true);
   }) // on appele la f crée ci-dessus
   .catch(error => console.error(error))
   
-
- /* Création de la fonction de filtres */
+/* Création de la fonction de filtres */
  document.querySelectorAll(".filter-button").forEach(btn => {
   btn.addEventListener("click", filterImages)
 })
@@ -95,12 +95,11 @@ function filterImages (event) {
 /* ---Page version admin--- */
 /* Vérifier si l'utilisateur est connecté et faire changement */
 const userAuthenticated = sessionStorage.getItem('token');
-  console.log(userAuthenticated)
     if (userAuthenticated) {
       // Si connecter faire des changements sur la page d'accueil
       const logInElement = document.querySelectorAll(".login")
       for (var i= 0; i < logInElement.length; i++) {
-        logInElement[i].style.display = "flex"; //peut-on mettre flex au lieu de block ?
+        logInElement[i].style.display = "flex";
       }
 
       //supprimer les filtres en mode admin
@@ -118,7 +117,6 @@ logoutLink.addEventListener("click", logout);
 function logout() {
   sessionStorage.removeItem('token');
   location.reload();
-  console.log('toto');
 }
 
 /*--- MODALS ---*/
@@ -169,10 +167,10 @@ modal.addEventListener("click", function(event) {
   } 
 });
 
-/* Création de la fonction de suppression dans la modale*/
+/* Création de la fonction de suppression d'image */
 function deletePicture(event) {
   const id = event.target.dataset.id;
-  console.log(id)
+  
   fetch(`http://localhost:5678/api/works/${id}`, {
     method: 'DELETE',
     headers: {
@@ -181,7 +179,6 @@ function deletePicture(event) {
     }
   })
     .then(function(response) {
-      console.log(response)
       if (response.ok) {
         // suppression de l'image
         const figure = event.target.closest('figure');
@@ -189,42 +186,64 @@ function deletePicture(event) {
         const figureHome = document.getElementById(`picture-${id}`)
         figureHome.remove();
       } else {
-        console.log("erreur gros bouffon", response)
+        //créer un message d'erreur
       }
     })
     .catch(error => console.error(error));
-  }
+}
 
-  //pourquoi la page se reload ????
+/* Création de la fonction d'ajout d'image */
+/*-------------------------test----------------------------*/
+const addPicFormEls = document.getElementById('add-pics-form');
+const userImg = document.getElementById('user-files');
+const imgPreview = document.getElementById('img-preview');
 
-  /* Création de la fonction d'ajout de photo */
-  /* Upload img*/
+userImg.addEventListener('change', () => {
+  const fileReader = new FileReader();
+  fileReader.readAsDataURL(userImg.files[0]);
 
-  /*envoi vers l'API*/
-  const addPicFormEls = document.querySelector('.add-pics-form')
+  fileReader.addEventListener('load', () => {
+    const url = fileReader.result;
+    const newImg = new Image();
+    newImg.src = url;
 
-  addPicFormEls.addEventListener('submit', (e) => {
-    (e).preventDefault();
+    imgPreview.appendChild(newImg);
+  });
+});
 
-    const dataForm = new FormData(addPicFormEls);
-  
-    fetch('http://localhost:5678/api/works', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'Content-Type': 'multipart/form-data',
-        'authorization': `Bearer ${sessionStorage.token}`
-      },
-      body: dataForm,
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
-      })
-      .catch(error => {
-        console.error(error);
-        // Afficher un message d'erreur générique
-      });  
+addPicFormEls.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const imgTitle = document.getElementById('title').value;
+  const imgCategory = document.getElementById('category').value;
+
+  const formData = new FormData();
+  formData.append('image', userImg.files[0]);
+  formData.append('title', imgTitle);
+  formData.append('category', imgCategory);
+
+  fetch('http://localhost:5678/api/works', {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${sessionStorage.token}`
+    },
+    body: formData,
   })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data)
+      addPicFormEls.reset();
+
+      alert('Votre formulaire a bien été envoyé.');
+      imgPreview.innerHTML = '';//supprime la preview
+
+      addPicturesToTarget(gallery, data);
+      addPicturesToTarget(modalGallery, data, true, true);
+    })
+    .catch(error => {
+      console.log("Erreur !!! Erreur !!! Erreur !!")
+      // Afficher un message d'erreur générique
+    });  
+});
 
 
