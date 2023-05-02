@@ -38,6 +38,10 @@
 			</button>
 		</figure>
 		<article>
+			<button type="button" class="edit-btn login">
+				<i class="fa-regular fa-pen-to-square"></i>				
+				modifier
+			</button>
 			<h2>Designer d'espace</h2>
 			<p>Je raconte votre histoire, je valorise vos idées. Je vous accompagne de la conception à la livraison finale du chantier.</p>
 			<p>Chaque projet sera étudié en commun, de façon à mettre en valeur les volumes, les matières et les couleurs dans le respect de l’esprit des lieux et le choix adapté des matériaux. Le suivi du chantier sera assuré dans le souci du détail, le respect du planning et du budget.</p>
@@ -83,18 +87,18 @@
 							<span class="iconImg">
 								<i class="fa-regular fa-image fa-2xl"></i>
 							</span>
-							<label for="user-files" required>+ ajouter photo</label>
-							<input type="file" name="user-files" id="user-files"  accept=".jpg, .png" required>
+							<label for="user-files">+ ajouter photo</label>
+							<input type="file" name="user-files" id="user-files">
 							<p>jpg, png 4mo max</p>
 						</div>
 						<div id="img-preview" style="display: none"></div>
 						<div class="add-pics-box-form">
 							<label for="title">Titre</label>
-							<input type="text" name="title" id="title" required>
+							<input type="text" name="title" id="title">
 						</div>
 						<div class="add-pics-box-form">
 							<label for="category">Catégories</label>
-							<select id="category" name="category" required>
+							<select id="category" name="category">
 								<option value="">Tous</option>
 								<option value="1">Objets</option>
 								<option value="2">Appartements</option>

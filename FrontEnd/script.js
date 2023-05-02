@@ -1,4 +1,4 @@
-/* ---Gestion des galeries--- */
+/*---Gestion des galeries--- */
 /* Récupération des éléments du DOM */
 const gallery = document.querySelector("#gallery")
 const modalGallery = document.querySelector("#modal-gallery")
@@ -152,6 +152,8 @@ function goBack() {
   modalAdd.style.display = "none";
   modalRemove.style.display = "";
   arrowBack.style.display = "";
+  imgPreview.innerHTML = ''; //supprime la preview
+  boxAddPic.style.display = '';
 }
 
 const closeBtn = document.getElementById("close-btn")
@@ -193,27 +195,34 @@ function deletePicture(event) {
 }
 
 /* Création de la fonction d'ajout d'image */
-/*-------------------------test----------------------------*/
 const addPicFormEls = document.getElementById('add-pics-form');
 const userImg = document.getElementById('user-files');
 const imgPreview = document.getElementById('img-preview');
 const boxAddPic = document.getElementById('box-add-pics')
 
 userImg.addEventListener('change', () => {
-  const fileReader = new FileReader();
-  fileReader.readAsDataURL(userImg.files[0]);
+  const file = userImg.files[0];
+  const allowedTypes = ['image/jpeg', 'image/png']; // types de fichiers autorisés
+  const maxSize = 4 * 1024 * 1024; // taille max de l'image en octets ce qui vaut 4Mo
 
-  fileReader.addEventListener('load', () => {
-    const url = fileReader.result;
-    const newImg = new Image();
-    newImg.src = url;
+  if (allowedTypes.includes(file.type) && file.size <= maxSize) { // conditions à remplir pour que l'image se preview
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
 
-    imgPreview.appendChild(newImg);
+    fileReader.addEventListener('load', () => {
+      const url = fileReader.result;
+      const newImg = new Image();
+      newImg.src = url;
 
-    boxAddPic.style.display = 'none';
-    imgPreview.style.display = 'block';
+      imgPreview.appendChild(newImg);
 
-  });
+      boxAddPic.style.display = 'none';
+      imgPreview.style.display = 'block';
+    });
+  } else {
+    alert('Veuillez sélectionner une image au format JPEG ou PNG, et dont la taille ne dépasse pas 4 Mo.');
+    userImg.value = ''; // efface la sélection de l'utilisateur
+  }
 });
 
 addPicFormEls.addEventListener('submit', (e) => {
@@ -226,6 +235,12 @@ addPicFormEls.addEventListener('submit', (e) => {
   formData.append('image', userImg.files[0]);
   formData.append('title', imgTitle);
   formData.append('category', imgCategory);
+
+  // Vérifier si les champs sont vides, si c'est le cas message d'alerte
+  if (!imgTitle || !imgCategory || !userImg.files[0]) {
+    alert('Veuillez vérifier que tous les champs soient bien remplis.');
+    return;
+  }
 
   fetch('http://localhost:5678/api/works', {
     method: 'POST',
@@ -240,15 +255,13 @@ addPicFormEls.addEventListener('submit', (e) => {
       addPicFormEls.reset();
 
       alert('Votre formulaire a bien été envoyé.');
+
       imgPreview.innerHTML = ''; //supprime la preview
 
-      addPicturesToTarget(gallery, [data]); //on met data en [], pour créer un array même pour sun seul objet car voir fonction ci-dessus
+      addPicturesToTarget(gallery, [data]);
       addPicturesToTarget(modalGallery, [data], true, true);
     })
-    .catch(error => {
-      console.log("Erreur !!! Erreur !!! Erreur !!")
-      // Afficher un message d'erreur générique
-    });  
+    .catch(error => console.error(error));  
 });
 
 

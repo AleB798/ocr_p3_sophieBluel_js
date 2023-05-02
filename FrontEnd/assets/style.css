@@ -68,6 +68,9 @@ body {
 	justify-content: center;
 	align-items: center;
 	gap: 20px;
+	position: sticky;
+	top: 0px;
+	z-index: 1;
 }
 
 .edit-bar-header i {
@@ -118,7 +121,7 @@ h1 > span {
 	letter-spacing: 0.1em;
 }
 
-h2{
+h2 {
 	font-family: 'Syne';
 	font-weight: 700;
 	font-size: 30px;
@@ -177,6 +180,10 @@ li a:hover {
 
 #introduction article {
 	flex: 1
+}
+
+#introduction article > button {
+	margin: 10px 0px;
 }
 
 #introduction h2 {

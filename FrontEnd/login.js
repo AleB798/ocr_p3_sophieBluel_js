@@ -29,7 +29,7 @@ form.addEventListener('submit', (e) => {
           stocker le token dans le sessionStorage*/
           sessionStorage.setItem('token', data.token);
           // Rediriger vers la page d'accueil
-          window.location.href = '/FrontEnd';
+          window.location.href = 'index.html';
         } else {
           errorMessage.style.display = 'block'
         };
