@@ -188,7 +188,7 @@ function deletePicture(event) {
         const figureHome = document.getElementById(`picture-${id}`)
         figureHome.remove();
       } else {
-        //créer un message d'erreur
+        alert('Erreur');
       }
     })
     .catch(error => console.error(error));
