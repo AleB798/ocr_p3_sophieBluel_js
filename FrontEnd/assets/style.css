@@ -482,11 +482,6 @@ hr {
 	cursor: pointer;
 }
 
-#add-pics-form button:focus,
-#add-pics-form button:hover {
-	background: #1D6154;
-}
-
 /* Add Filters Gallery */
 .filters-gallery {
 	display: flex;

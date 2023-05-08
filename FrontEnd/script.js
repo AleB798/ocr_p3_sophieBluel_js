@@ -81,6 +81,9 @@ fetch('http://localhost:5678/api/works')
   btn.addEventListener("click", filterImages)
 })
 
+
+/* ---création des filtres--- */
+
 function filterImages (event) {
   const categoryId = event.target.dataset.categoryId
   gallery.querySelectorAll("figure").forEach(figure => {
@@ -205,23 +208,33 @@ userImg.addEventListener('change', () => {
   const allowedTypes = ['image/jpeg', 'image/png']; // types de fichiers autorisés
   const maxSize = 4 * 1024 * 1024; // taille max de l'image en octets ce qui vaut 4Mo
 
-  if (allowedTypes.includes(file.type) && file.size <= maxSize) { // conditions à remplir pour que l'image se preview
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
+  if (allowedTypes.includes(file.type)) { 
+  // vérifie si le format est autorisé
+    if (file.size <= maxSize) { 
+    // vérifie si la taille est autorisée
 
-    fileReader.addEventListener('load', () => {
-      const url = fileReader.result;
-      const newImg = new Image();
-      newImg.src = url;
+      const fileReader = new FileReader();
+      fileReader.readAsDataURL(file);
 
-      imgPreview.appendChild(newImg);
+      fileReader.addEventListener('load', () => {
+        const url = fileReader.result;
+        const newImg = new Image();
+        newImg.src = url;
 
-      boxAddPic.style.display = 'none';
-      imgPreview.style.display = 'block';
-    });
+        imgPreview.appendChild(newImg);
+
+        boxAddPic.style.display = 'none';
+        imgPreview.style.display = 'block';
+      });
+    } else {
+      // affiche un message d'erreur si la taille est trop grande
+      alert('Taille maximale autorisée dépassée. Veuillez soumettre une image de max 4Mo');
+      userImg.value = ''; // efface l'img sélectionnée
+    }
   } else {
-    alert('Veuillez sélectionner une image au format JPEG ou PNG, et dont la taille ne dépasse pas 4 Mo.');
-    userImg.value = ''; // efface la sélection de l'utilisateur
+    // affiche un message d'erreur si le format est incorrect
+    alert('Format non compatible. Veuillez sélectionner une image au format JPEG ou PNG.');
+    userImg.value = ''; // efface l'img sélectionnée
   }
 });
 
@@ -236,11 +249,13 @@ addPicFormEls.addEventListener('submit', (e) => {
   formData.append('title', imgTitle);
   formData.append('category', imgCategory);
 
-  // Vérifier si les champs sont vides, si c'est le cas message d'alerte
-  if (!imgTitle || !imgCategory || !userImg.files[0]) {
+  // Vérifier si le formulaire est bien rempli, si ok bouton submit change de couleur sinon message d'alerte
+  if (imgTitle || imgCategory || userImg.files[0]) {
+    document.getElementById('btnAddForm').style.backgroundColor='#1D6154';
+  } else {
     alert('Veuillez vérifier que tous les champs soient bien remplis.');
     return;
-  }
+  };
 
   fetch('http://localhost:5678/api/works', {
     method: 'POST',
@@ -252,7 +267,8 @@ addPicFormEls.addEventListener('submit', (e) => {
     .then(response => response.json())
     .then(data => {
       boxAddPic.style.display = '';
-      addPicFormEls.reset();
+      addPicFormEls.reset();    
+      document.getElementById('btnAddForm').style.backgroundColor='';
 
       alert('Votre formulaire a bien été envoyé.');
 
