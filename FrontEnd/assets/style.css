@@ -483,7 +483,7 @@ hr {
 }
 
 /* Add Filters Gallery */
-.filters-gallery {
+#filters-gallery {
 	display: flex;
 	justify-content: center;
 	gap: 15px;
@@ -503,9 +503,11 @@ hr {
 	padding: 8px 10px;
 }
 
+.filter-button.active,
 .filter-button:hover {
 	background-color: #1D6154;
 	color: #FFFFFF;
+	transition: background-color 2s, transform 2s;
 }
 
 #gallery {

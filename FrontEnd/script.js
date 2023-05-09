@@ -73,27 +73,62 @@ fetch('http://localhost:5678/api/works')
   .then(data => {
     addPicturesToTarget(gallery, data);
     addPicturesToTarget(modalGallery, data, true, true);
-  }) // on appele la f crée ci-dessus
+  }) // on appele la f créée ci-dessus
   .catch(error => console.error(error))
-  
-/* Création de la fonction de filtres */
- document.querySelectorAll(".filter-button").forEach(btn => {
-  btn.addEventListener("click", filterImages)
-})
 
+/*--------------------------------------------------------------------------------------------------------------*/
+/*---------------------------------------------CORRECTIONS SOUTENANCE-------------------------------------------*/
 
-/* ---création des filtres--- */
+/* ---Création des filtres--- */
+function addFilters(filterElt) {
+  filterElt.forEach(obj => {
 
-function filterImages (event) {
-  const categoryId = event.target.dataset.categoryId
-  gallery.querySelectorAll("figure").forEach(figure => {
-    if (categoryId === undefined || figure.dataset.categoryId === categoryId) {
-      figure.style.display = ""
-    } else {
-      figure.style.display = "none"
-    }
+    const filters = document.getElementById('filters-gallery')
+    const filtersBtn = document.createElement("button")
+    filtersBtn.setAttribute("type", "button")
+    filtersBtn.classList.add('filter-button')
+    filtersBtn.textContent = obj.name
+    filtersBtn.dataset.categoryId = obj.id
+
+    filters.appendChild(filtersBtn)
+
+    filtersBtn.addEventListener('click', filterImages)
   })
 }
+
+function filterImages (e) {
+
+  const filters = document.getElementById('filters-gallery')
+  
+    e.target.classList.add("active");
+
+    const filterBtns = filters.querySelectorAll(".filter-button");
+    filterBtns.forEach((btn) => {
+      if (btn !== e.target) {
+        btn.classList.remove("active");
+      }
+    });
+
+    const categoryId = e.target.dataset.categoryId
+    gallery.querySelectorAll("figure").forEach(figure => {
+      if (categoryId === undefined || figure.dataset.categoryId === categoryId) {
+        figure.style.display = ""
+      } else {
+        figure.style.display = "none"
+      }
+    })
+}
+
+/* Récupération dynamique des données des catégories */
+fetch('http://localhost:5678/api/categories')
+  .then(response => response.json())
+  .then(data => {
+    console.log(data)
+    addFilters(data)
+    document.getElementById('filter-all').addEventListener('click',filterImages)
+  }) // on appele la f créée ci-dessus
+  .catch(error => console.error(error))
+
 
 /* ---Page version admin--- */
 /* Vérifier si l'utilisateur est connecté et faire changement */
@@ -106,7 +141,7 @@ const userAuthenticated = sessionStorage.getItem('token');
       }
 
       //supprimer les filtres en mode admin
-      document.querySelector('.filters-gallery').style.display = "none";
+      document.getElementById('filters-gallery').style.display = "none";
 
       //changer le texte du lien de navigation
       var loginLink = document.getElementById("log-link");
@@ -250,7 +285,7 @@ addPicFormEls.addEventListener('submit', (e) => {
   formData.append('category', imgCategory);
 
   // Vérifier si le formulaire est bien rempli, si ok bouton submit change de couleur sinon message d'alerte
-  if (imgTitle || imgCategory || userImg.files[0]) {
+  if (imgTitle && imgCategory && userImg.files[0]) {
     document.getElementById('btnAddForm').style.backgroundColor='#1D6154';
   } else {
     alert('Veuillez vérifier que tous les champs soient bien remplis.');
