@@ -1,4 +1,4 @@
-# # SOPHIE BLUEL (P3)
+# SOPHIE BLUEL (P3)
 ## Création d'une page web dynamique avec JavaScript
 
 ### Missions : <br>
